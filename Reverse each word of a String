@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+int main()
+{
+   char a[100];
+   scanf("%[^\n]*c",a);
+   int i,j,start,end;
+   int len = 0;
+   while(a[len] != '\0')
+   {
+       len++;
+   }
+   end = len-1;
+   for(i = len - 1;i>=0;i--){
+       if(a[i]== ' ' || i == 0){
+           if(i==0){
+               start = 0;
+           } else {
+               start = i + 1;
+           }
+           for(j=start; j <= end; j++){
+               printf("%c",a[j]);
+           } 
+           end = i - 1;
+           if(i!=0) {
+               printf("%c", a[i]);
+           }
+       }
+   }
+    return 0;
+}
