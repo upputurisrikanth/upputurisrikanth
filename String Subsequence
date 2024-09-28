@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+  char t[100];
+  char s[100];
+  scanf("%s %s",t,s);
+  if(strlen(s) > strlen(t)){
+      printf("0");
+      return 0;
+  } 
+  int i = 0, j=0;
+  while(j<strlen(t)){
+      if(i<strlen(s) && s[i] == t[j]){
+          i++;
+          j++;
+      } else {
+          j++;
+      }
+  }
+    if(i==strlen(s)){
+        printf("1");
+    } else {
+        printf("0");
+    }
+   return 0;
+}
