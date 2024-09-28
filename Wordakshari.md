@@ -11,7 +11,4 @@ int main(){
     } while(strcmp(a,c) != 0);
     return 0;
 }
-<!---
-upputurisrikanth/upputurisrikanth is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+
