@@ -1,0 +1,116 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 1000
+
+// Stack structure for characters
+typedef struct {
+    char stackArray[MAX_SIZE];
+    int top;
+} Stack;
+
+// Function to initialize the stack
+void initializeStack(Stack* stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is empty
+int isStackEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// Function to check if the stack is full
+int isStackFull(Stack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to push a character onto the stack
+void push(Stack* stack, char value) {
+    if (isStackFull(stack)) {
+        printf("Stack overflow\n");
+        return;
+    }
+    stack->stackArray[++stack->top] = value;
+}
+
+// Function to pop a character from the stack
+char pop(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        printf("Stack underflow\n");
+        return '\0';
+    }
+    return stack->stackArray[stack->top--];
+}
+
+void display(Stack *s) {
+    for (int i = s->top; i>=0 ; i--) {
+        printf("%d ", s->stackArray[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int n1;
+    scanf("%d", &n1);
+   
+    Stack stack1;
+    initializeStack(&stack1);
+   
+    for(int i=0;i<n1;i++){
+      int temp;
+      scanf("%d", &temp);
+      push(&stack1, temp);
+    }
+ 
+ 
+    int n2;
+    scanf("%d", &n2);
+   
+    Stack stack2;
+    initializeStack(&stack2);
+   
+    for(int i=0;i<n2;i++){
+      int temp;
+      scanf("%d", &temp);
+      push(&stack2, temp);
+    }
+   
+    int d1, d2;
+    scanf("%d", &d1);
+    scanf("%d", &d2);
+ 
+    printf("Stack 1 Elements:\n");
+    display(&stack1);
+    printf("Stack 2 Elements:\n");
+    display(&stack2);
+ 
+    if(d1>n1){
+      printf("Stack underflow. pop from stack 1 failed\n");
+      for(int i=0;i<n1;i++){
+              pop(&stack1);
+      }
+    }else{
+        for(int i=0;i<d1;i++){
+              pop(&stack1);
+        }
+    }
+ 
+    if(d2>n2){
+      printf("Stack underflow. pop from stack 2 failed\n");
+      for(int i=0;i<n2;i++){
+              pop(&stack2);
+      }
+    }else{
+        for(int i=0;i<d2;i++){
+              pop(&stack2);
+        }
+    }
+ 
+    printf("Stack 1 Elements:\n");
+    display(&stack1);
+    printf("Stack 2 Elements:\n");
+    display(&stack2);
+   
+    return 0;
+}
