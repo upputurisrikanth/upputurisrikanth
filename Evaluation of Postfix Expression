@@ -1,0 +1,97 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 1000
+
+// Stack structure for characters
+typedef struct {
+    int stackArray[MAX_SIZE];
+    int top;
+} Stack;
+
+// Function to initialize the stack
+void initializeStack(Stack* stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is empty
+int isStackEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// Function to check if the stack is full
+int isStackFull(Stack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to push a character onto the stack
+void push(Stack* stack, int value) {
+    if (isStackFull(stack)) {
+        printf("Stack overflow\n");
+        return;
+    }
+    stack->stackArray[++stack->top] = value;
+}
+
+// Function to pop a character from the stack
+int pop(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        printf("Stack underflow\n");
+        return '\0';
+    }
+    return stack->stackArray[stack->top--];
+}
+
+int peek(Stack* stack){
+  return stack->stackArray[stack->top];
+}
+
+
+double evaluate(char c, int a, int b) {
+    if (c == '+')
+        return a + b;
+    else if (c == '-')
+        return a - b;
+    else if (c == '*')
+        return a * b;
+    else if (c == '/')
+        return (double)(a / b);
+    else
+        return 0;
+}
+
+int evaluationPostFix(char* str){
+    Stack st;
+    initializeStack(&st);
+
+    for (int i = 0; str[i] != '\0'; i++) {
+        char c = str[i];
+        if (isdigit(c)) {
+            push(&st, c - '0');
+        } else if (c == ' ') {
+            continue;
+        } else {
+            int b = pop(&st);
+            int a = pop(&st);
+            double x = evaluate(c, a, b);
+            push(&st, (int)x);
+        }
+    }
+   
+    return pop(&st);
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+ 
+    while(n>0){
+      char str[MAX_SIZE];
+      scanf("%s", str);
+      printf("%d\n", evaluationPostFix(str));
+      n--;
+    }
+   
+    return 0;
+}
