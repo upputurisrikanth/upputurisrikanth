@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_SIZE 1000
+
+// Stack structure for integers
+typedef struct {
+    int data[MAX_SIZE];
+    int top;
+} Stack;
+
+// Function to initialize the stack
+void initializeStack(Stack* stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is empty
+int isStackEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// Function to check if the stack is full
+int isStackFull(Stack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to push an integer onto the stack
+void push(Stack* stack, int value) {
+    if (isStackFull(stack)) {
+        printf("Stack overflow\n");
+        return;
+    }
+    stack->data[++stack->top] = value;
+}
+
+// Function to pop an integer from the stack
+int pop(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        printf("Stack underflow\n");
+        return -1;
+    }
+    return stack->data[stack->top--];
+}
+
+// Function to get the top element of the stack
+int peek(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        return -1;
+    }
+    return stack->data[stack->top];
+}
+
+int longestBalancedPar(char* str){
+   
+    int n = strlen(str);
+    Stack stack;
+    initializeStack(&stack);
+   
+    push(&stack, -1);
+    int lenMax = 0;
+   
+    for(int i=0;i<n;i++){
+        if(str[i]=='('){
+            push(&stack, i);
+        }else{
+            pop(&stack);
+           
+            if(isStackEmpty(&stack)){
+                push(&stack, i);
+            }else{
+                int len = i-peek(&stack);
+                if(len>lenMax){
+                    lenMax = len;
+                }
+            }
+        }
+       
+       
+    }
+    return lenMax;
+}
+
+int main(){
+   
+    char str[MAX_SIZE];
+    scanf("%s", str);
+   
+    printf("%d", longestBalancedPar(str));
+}
