@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+#define MAX_SIZE 1000
+
+// Stack structure for characters
+typedef struct {
+    char data[MAX_SIZE];
+    int top;
+} Stack;
+
+// Function to initialize the stack
+void initializeStack(Stack* stack) {
+    stack->top = -1;
+}
+
+// Function to check if the stack is empty
+bool isStackEmpty(Stack* stack) {
+    return stack->top == -1;
+}
+
+// Function to check if the stack is full
+bool isStackFull(Stack* stack) {
+    return stack->top == MAX_SIZE - 1;
+}
+
+// Function to push a character onto the stack
+void push(Stack* stack, char value) {
+    if (isStackFull(stack)) {
+        printf("Stack overflow\n");
+        return;
+    }
+    stack->data[++stack->top] = value;
+}
+
+// Function to pop a character from the stack
+char pop(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        printf("Stack underflow\n");
+        return '\0';
+    }
+    return stack->data[stack->top--];
+}
+
+// Function to get the top element of the stack
+char peek(Stack* stack) {
+    if (isStackEmpty(stack)) {
+        return '\0';
+    }
+    return stack->data[stack->top];
+}
+
+
+bool isRedundantBraces(char* str){
+   
+    Stack stack;
+    initializeStack(&stack);
+   
+    for(int i=0;str[i]!='\0';i++){
+       
+        char c = str[i];
+       
+        if(c!=')'){
+            push(&stack, c);
+        }else{
+            bool hasOp = false;
+           
+            while(!isStackEmpty(&stack) && peek(&stack)!='('){
+                char top = pop(&stack);
+               
+                if(top=='+' || top=='-' || top=='*' || top=='/'){
+                    hasOp = true;
+                }
+            }
+            if(!isStackEmpty(&stack)){
+                pop(&stack);
+            }
+           
+            if(!hasOp){
+                return true;
+            }
+        }
+       
+       
+    }
+   
+    return false;
+}
+
+
+
+int main(){
+   
+    char str[MAX_SIZE];
+   
+    scanf("%s", str);
+   
+    if(isRedundantBraces(str)){
+        printf("Yes");
+    }else{
+        printf("No");
+    }
+}
