@@ -1,0 +1,124 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
+
+#define MAX_SIZE 100
+// Node structure
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+// Queue structure for level-order traversal
+typedef struct Queue {
+    Node* data[MAX_SIZE];
+    int front;
+    int rear;
+} Queue;
+
+// Function to initialize the queue
+void initQueue(Queue* q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+// Function to check if the queue is empty
+int isEmpty(Queue* q) {
+    return q->front == -1;
+}
+
+int isFull(Queue *q) {
+    return (q->rear == MAX_SIZE - 1);
+}
+
+// Function to enqueue an element
+void enqueue(Queue* q, Node* node) {
+    if (!isFull(q)) {
+        q->data[++(q->rear)] = node;
+        if (q->front == -1) {
+            q->front = 0;
+        }
+    }
+}
+
+// Function to dequeue an element
+Node* dequeue(Queue* q) {
+    if (!isEmpty(q)) {
+        return q->data[(q->front)++];
+    }
+    return NULL;
+}
+
+// Function to create a new node
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Function to build the binary tree from level-wise input
+Node* buildTree(int arr[], int n) {
+    if (n == 0 || arr[0] == -1) {
+        return NULL;
+    }
+
+    Node* root = createNode(arr[0]);
+    Queue q;
+    initQueue(&q);
+    enqueue(&q, root);
+    int i = 1;
+
+    while (i < n) {
+        Node* curr = dequeue(&q);
+
+        // Process left child
+        if (i < n && arr[i] != -1) {
+            curr->left = createNode(arr[i]);
+            enqueue(&q, curr->left);
+        }
+        i++;
+
+        // Process right child
+        if (i < n && arr[i] != -1) {
+            curr->right = createNode(arr[i]);
+            enqueue(&q, curr->right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
+int height(Node* root){
+    if(root==NULL){
+        return 0;
+    }
+   
+    return 1+fmax(height(root->left), height(root->right));
+}
+
+
+int main()
+{
+    char input[1000];
+    fgets(input, 1000, stdin);
+
+    // Split the input string into integers
+    int arr[100], count = 0;
+    char* token = strtok(input, " ");
+    while (token != NULL) {
+        arr[count++] = atoi(token);
+        token = strtok(NULL, " ");
+    }
+
+    // Build the tree
+    Node* root = buildTree(arr, count);
+   
+    printf("%d", height(root));
+
+    return 0;
+}
