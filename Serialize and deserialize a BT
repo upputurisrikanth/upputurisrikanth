@@ -1,0 +1,197 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_SIZE 100
+// Node structure
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+// Queue structure for level-order traversal
+typedef struct Queue {
+    Node* data[MAX_SIZE];
+    int front;
+    int rear;
+} Queue;
+
+// Function to initialize the queue
+void initQueue(Queue* q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+// Function to check if the queue is empty
+int isEmpty(Queue* q) {
+    return q->front == -1 || q->front > q->rear;
+}
+
+int isFull(Queue *q) {
+    return (q->rear == MAX_SIZE - 1);
+}
+
+// Function to enqueue an element
+void enqueue(Queue* q, Node* node) {
+    if (!isFull(q)) {
+        q->data[++(q->rear)] = node;
+        if (q->front == -1) {
+            q->front = 0;
+        }
+    }
+}
+
+// Function to dequeue an element
+Node* dequeue(Queue* q) {
+    if (!isEmpty(q)) {
+        return q->data[(q->front)++];
+    }
+    return NULL;
+}
+
+// Function to create a new node
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+
+Node* buildTree(int arr[], int n) {
+    if (n == 0) {
+        return NULL;
+    }
+
+    Node* root = createNode(arr[0]);
+    Queue q;
+    initQueue(&q);
+    enqueue(&q, root);
+    int i = 1;
+
+    while (!isEmpty(&q) && i < n) {
+        Node* curr = dequeue(&q);
+
+        // Process left child
+        if (i < n && arr[i] != -1) {
+            curr->left = createNode(arr[i]);
+            enqueue(&q, curr->left);
+        }
+        i++;
+        if(i>=n){
+          break;
+        }
+
+        // Process right child
+        if (i < n && arr[i] != -1) {
+            curr->right = createNode(arr[i]);
+            enqueue(&q, curr->right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
+void serialize(Node* root, char* str){
+   
+   
+    Queue q;
+    initQueue(&q);
+    enqueue(&q, root);
+   
+    int i = -1;
+    while(!isEmpty(&q)){
+       
+        Node* curr = dequeue(&q);
+        if(curr==NULL){
+            strcat(str,"-1 ");
+            continue;
+        }
+       
+        char s[20];
+        int val = curr->data;
+        sprintf(s,"%d",val);
+        strcat(str,s);
+        strcat(str," ");
+        enqueue(&q,curr->left);
+        enqueue(&q,curr->right);
+    }
+}
+
+Node* deserialize(int arr[], int n) {
+    if (n == 0) {
+        return NULL;
+    }
+
+    Node* root = createNode(arr[0]);
+    Queue q;
+    initQueue(&q);
+    enqueue(&q, root);
+    int i = 1;
+
+    while (!isEmpty(&q) && i < n) {
+        Node* curr = dequeue(&q);
+
+        // Process left child
+        if (i < n && arr[i] != -1) {
+            curr->left = createNode(arr[i]);
+            enqueue(&q, curr->left);
+        }
+        i++;
+        if(i>=n){
+          break;
+        }
+
+        // Process right child
+        if (i < n && arr[i] != -1) {
+            curr->right = createNode(arr[i]);
+            enqueue(&q, curr->right);
+        }
+        i++;
+    }
+
+    return root;
+}
+
+int main() {
+    char input[1000];
+    fgets(input, 1000, stdin);
+
+    // Split the input string into integers
+    int arr1[100], count1 = 0;
+    char* token1 = strtok(input, " ");
+    while (token1 != NULL) {
+      if(strcmp(token1,"N")==0){
+        token1 = "-1";
+      }
+        arr1[count1++] = atoi(token1);
+        token1 = strtok(NULL, " ");
+    }
+
+    // Build the tree
+    Node* root = buildTree(arr1, count1);
+   
+    char serializeStr1[1000];
+    serialize(root,serializeStr1);
+   
+    // Split the input string into integers
+    int arr2[100], count2 = 0;
+    char* token2 = strtok(input, " ");
+    while (token2 != NULL) {
+      if(strcmp(token2,"N")==0){
+        token2 = "-1";
+      }
+        arr2[count2++] = atoi(token2);
+        token2 = strtok(NULL, " ");
+    }
+   
+    char serializeStr2[1000];
+    Node* deserializedRoot = deserialize(arr2, count2);
+    serialize(root,serializeStr2);
+   
+    printf("%s", serializeStr2);
+    return 0;
+}
