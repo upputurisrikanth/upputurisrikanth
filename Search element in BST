@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the Node structure
+typedef struct Node {
+    int data;
+    struct Node* left;
+    struct Node* right;
+} Node;
+
+// Function to create a new node
+Node* createNode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = data;
+    newNode->left = NULL;
+    newNode->right = NULL;
+    return newNode;
+}
+
+// Function to search for an element in the tree
+int search(Node* root, int elt) {
+    if (root == NULL) {
+        return 0; // Element not found
+    }
+
+    if (root->data == elt) {
+        return 1; // Element found
+    }else if(root->data > elt){
+        return search(root->left, elt);
+    }else{
+        return search(root->right, elt);
+    }
+   
+}
+
+// Function to insert a node into the tree
+Node* insert(Node* root, int data) {
+    if (root == NULL) {
+        return createNode(data); // Create a new node if the tree is empty
+    }
+
+    if (data < root->data) {
+        root->left = insert(root->left, data); // Insert into the left subtree
+    } else if (data > root->data) {
+        root->right = insert(root->right, data); // Insert into the right subtree
+    }
+
+    return root; // Return the updated root
+}
+
+// Main function
+int main() {
+    int t, data, searchelt;
+    Node* root = NULL;
+
+    // Read the number of elements to insert
+    scanf("%d", &t);
+
+    // Insert elements into the tree
+    for (int i = 0; i < t; i++) {
+        scanf("%d", &data);
+        root = insert(root, data);
+    }
+
+    // Read the element to search
+    scanf("%d", &searchelt);
+
+    // Search for the element and print the result
+    if (search(root, searchelt)) {
+        printf("true\n");
+    } else {
+        printf("false\n");
+    }
+
+    return 0;
+}
