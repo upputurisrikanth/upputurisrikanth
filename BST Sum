@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node{
+    int data;
+    struct Node* left;
+    struct Node* right;
+}Node;
+
+Node* createNode(int val){
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = val;
+    newNode->left = NULL;
+    newNode->right = NULL;
+   
+    return newNode;
+}
+
+Node* insert(Node* root, int val){
+    if(root==NULL){
+        return createNode(val);
+    }
+   
+    if(val<root->data){
+        root->left = insert(root->left, val);
+    }else{
+        root->right = insert(root->right, val);
+    }
+   
+    return root;
+}
+
+int bstsum(Node* root){
+	if(root == NULL){
+		return 0;
+	}
+	
+	int leftsum = bstsum(root->left);
+	int rightsum = bstsum(root->right);
+	return root->data + leftsum + rightsum;
+}
+
+
+int main()
+{
+	int data;
+    Node* root = NULL;
+
+    // Read the number of elements to insert
+    scanf("%d", &data);
+    while(data != -1){
+    	root = insert(root, data);
+		scanf("%d", &data);	
+	}	
+    	int n = bstsum(root);
+    	printf("Sum of all nodes are %d", n);
+
+    return 0;
+}
