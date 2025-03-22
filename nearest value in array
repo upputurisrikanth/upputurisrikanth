@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+int main() {
+	int n;
+	int min;
+	scanf("%d", &n);
+	
+	int arr[n];
+	for(int i = 0; i < n; i++){
+		scanf("%d", &arr[i]);
+		//printf("%d ", arr[i]);
+	}
+	int k;
+	scanf("%d", &k);
+	
+	int diff = arr[0];
+	min = abs(arr[0] - k);
+	
+	for(int i = 0; i < n; i++){
+		if(abs(arr[i] - k) < min){
+			min = abs(arr[i] - k);
+			diff = arr[i];
+		}
+	}
+	printf("%d ", diff);
+	  
+    return 0;
+}
