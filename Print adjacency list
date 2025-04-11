@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node{
+    int data;
+    struct Node* next;
+}Node;
+
+Node* createNode(int val){
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = val;
+    newNode->next = NULL;
+   
+    return newNode;
+}
+
+Node* insert(Node* head, int val){
+    if(head==NULL){
+        return createNode(val);
+    }else{
+        Node* temp = head;
+       
+        while(temp->next!=NULL){
+            temp = temp->next;
+        }
+       
+        temp->next = createNode(val);
+    }
+   
+    return head;
+}
+
+void addEdge(Node* arr[], int v1, int v2){
+    arr[v1] = insert(arr[v1], v2);
+    arr[v2] = insert(arr[v2], v1);
+}
+
+void printList(Node* arr[], int v){
+   
+    for(int i=0;i<v;i++){
+        Node* temp = arr[i];
+       
+        printf("%d", i);
+       
+        while(temp!=NULL){
+            printf("-> %d", temp->data);
+            temp = temp->next;
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    int t;
+    scanf("%d", &t);
+    while(t--){
+        int v, e;
+        scanf("%d %d", &v, &e);
+       
+        Node* arr[v];
+        for(int i=0;i<v;i++){
+            arr[i] = NULL;
+        }
+       
+        while(e--){
+            int v1, v2;
+            scanf("%d %d", &v1, &v2);
+           
+            addEdge(arr, v1, v2);
+           
+           
+           
+        }
+        printList(arr, v);
+    }
+
+    return 0;
+}
