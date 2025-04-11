@@ -1,0 +1,147 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX_SIZE 10000
+
+typedef struct Queue {
+    int data[MAX_SIZE];
+    int front;
+    int rear;
+} Queue;
+
+// Function to initialize the queue
+void initQueue(Queue* q) {
+    q->front = -1;
+    q->rear = -1;
+}
+
+// Function to check if the queue is empty
+bool isEmpty(Queue* q) {
+    return q->front == -1;
+}
+
+// Function to check if the queue is full
+bool isFull(Queue* q) {
+    return q->rear == MAX_SIZE - 1;
+}
+
+// Function to enqueue an element
+void enqueue(Queue* q, int val) {
+    if (isFull(q)) {
+        return;
+    }
+    q->data[++(q->rear)] = val;
+    if (q->front == -1) {
+        q->front = 0;
+    }
+}
+
+// Function to dequeue an element
+int dequeue(Queue* q) {
+    if (isEmpty(q)) {
+        return -1;
+    }
+    int val = q->data[(q->front)++];
+    if (q->front > q->rear) {  // Reset queue when empty
+        q->front = -1;
+        q->rear = -1;
+    }
+    return val;
+}
+
+typedef struct Node{
+    int data;
+    struct Node* next;
+}Node;
+
+Node* createNode(int val){
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->data = val;
+    newNode->next = NULL;
+   
+    return newNode;
+}
+
+Node* insert(Node* head, int val){
+    if(head==NULL){
+        return createNode(val);
+    }else{
+        Node* temp = head;
+       
+        while(temp->next!=NULL){
+            temp = temp->next;
+        }
+       
+        temp->next = createNode(val);
+    }
+   
+    return head;
+}
+
+void addEdge(Node* arr[], int v1, int v2){
+    arr[v1] = insert(arr[v1], v2);
+    arr[v2] = insert(arr[v2], v1);
+}
+
+void BFS(Node* arr[], int v, int src){
+   
+    Queue q;
+    initQueue(&q);
+   
+    bool visited[v];
+   
+    for(int i=0;i<v;i++){
+        visited[i] = false;
+    }
+   
+    enqueue(&q, src);
+    visited[src] = true;
+   
+    while(!isEmpty(&q)){
+        int curr = dequeue(&q);
+        printf("%d ", curr);
+       
+        Node* temp = arr[curr];
+        while(temp!=NULL){
+            if(!visited[temp->data]){
+                enqueue(&q, temp->data);
+                visited[temp->data]= true;
+            }
+            temp = temp->next;
+        }
+    }
+   
+}
+
+
+int main()
+{
+   
+        int v;
+        scanf("%d", &v);
+  		if(v==0){
+          printf("Graph doesn't exist");
+          return 0;
+        }
+       
+        Node* arr[v];
+        for(int i=0;i<v;i++){
+            arr[i] = NULL;
+        }
+       
+        int v1, v2;
+        scanf("%d %d", &v1, &v2);
+       
+        while(v1!=-1 && v2!=-1){
+           
+           
+            addEdge(arr, v1, v2);
+            scanf("%d %d", &v1, &v2);
+           
+        }
+       printf("BFS : ");
+        BFS(arr, v, 0);
+       
+
+    return 0;
+}
