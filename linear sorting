@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node{
+    int data;
+    struct node *next;
+};
+
+struct node *head= NULL;
+
+void push(int d){
+    struct node *new= (struct node*) malloc(sizeof(struct node));
+    new->data= d;
+    new->next= head;
+    head= new;
+}
+
+int search(struct node* head, int t){
+    struct node *i;
+    int index= 0;
+    
+    for(i= head;i!=NULL;i=i->next, index++) {
+        if(i->data==t){
+            return index;
+        }
+    }
+    return -1;
+}
+
+int main() {
+    push(3);    push(2);   push(8);    push(1);   push(4);
+    int t= 3;
+    int index= search(head, t);
+    
+    printf("%d ", index);
+    return 0;
+}
